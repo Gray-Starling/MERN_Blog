@@ -1,12 +1,23 @@
 import express from 'express'
+import multer from 'multer'
 import mongoose from 'mongoose'
-import { registerValidation } from './validations/auth.js'
-import checkAuth from './utils/checkAuth.js'
-import * as UserController from "./controllers/UserController.js"
+import 'dotenv/config'
+
+import { UserController, PostController } from './controllers/controllers.js'
+import { checkAuth, handleValidationErrors } from './utils/utils.js'
+import {
+	registerValidation,
+	loginValidation,
+	postCreateValidation,
+} from './validations.js'
+
+const MongooseUri = process.env.MONGODB;
+// console.log("Mongo",MongooseUri)
 
 mongoose
 	.connect(
-		'mongodb+srv://skvorcovsa90:RM13sherifM@cluster0.k1n7bwy.mongodb.net/blog?retryWrites=true&w=majority'
+		// 'mongodb+srv://skvorcovsa90:RM13sherifM@cluster0.k1n7bwy.mongodb.net/blog?retryWrites=true&w=majority'
+		process.env.MONGODB
 	)
 	.then(() => {
 		console.log('DB ok')
@@ -16,11 +27,58 @@ mongoose
 	})
 
 const app = express()
-app.use(express.json())
 
-app.post('/auth/login', UserController.login)
-app.post('/auth/register', registerValidation, UserController.register)
+const storage = multer.diskStorage({
+	destination: (_, __, cb) => {
+		cb(null, 'uploads')
+	},
+	filename: (_, file, cb) => {
+		cb(null, file.originalname)
+	},
+})
+
+const upload = multer({ storage })
+
+app.use(express.json())
+app.use('/uploads', express.static('uploads'))
+
+app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
+	res.json({
+		url: `/upload/${req.file.originalname}`,
+	})
+})
+
+app.post(
+	'/auth/login',
+	loginValidation,
+	handleValidationErrors,
+	UserController.login
+)
+app.post(
+	'/auth/register',
+	handleValidationErrors,
+	registerValidation,
+	UserController.register
+)
 app.get('/auth/me', checkAuth, UserController.getMe)
+
+app.get('/posts', PostController.getAll)
+app.post(
+	'/posts',
+	checkAuth,
+	postCreateValidation,
+	handleValidationErrors,
+	PostController.create
+)
+app.get('/posts/:id', PostController.getOne)
+app.delete('/posts/:id', checkAuth, PostController.remove)
+app.patch(
+	'/posts/:id',
+	checkAuth,
+	postCreateValidation,
+	handleValidationErrors,
+	PostController.update
+)
 
 app.listen(4444, err => {
 	if (err) {
