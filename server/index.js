@@ -2,7 +2,7 @@ import express from 'express'
 import multer from 'multer'
 import mongoose from 'mongoose'
 import 'dotenv/config'
-
+import cors from 'cors'
 import { UserController, PostController } from './controllers/controllers.js'
 import { checkAuth, handleValidationErrors } from './utils/utils.js'
 import {
@@ -11,14 +11,14 @@ import {
 	postCreateValidation,
 } from './validations.js'
 
-const MongooseUri = process.env.MONGODB;
-// console.log("Mongo",MongooseUri)
+const MongooseUri = process.env.MONGODB
+const corsOptions = {
+	origin: process.env.CORS_URL,
+	optionsSuccessStatus: 200,
+}
 
 mongoose
-	.connect(
-		// 'mongodb+srv://skvorcovsa90:RM13sherifM@cluster0.k1n7bwy.mongodb.net/blog?retryWrites=true&w=majority'
-		process.env.MONGODB
-	)
+	.connect(process.env.MONGODB)
 	.then(() => {
 		console.log('DB ok')
 	})
@@ -41,6 +41,19 @@ const upload = multer({ storage })
 
 app.use(express.json())
 app.use('/uploads', express.static('uploads'))
+app.use(cors(corsOptions))
+// app.use((req, res, next) => {
+// 	res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+// 	res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+// 	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+
+// 	if (req.method === 'OPTIONS') {
+// 		res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+// 		res.sendStatus(200)
+// 	} else {
+// 		next()
+// 	}
+// })
 
 app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
 	res.json({
