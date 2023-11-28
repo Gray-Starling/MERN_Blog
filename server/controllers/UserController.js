@@ -12,7 +12,7 @@ export const register = async (req, res) => {
 			fullName: req.body.fullName,
 			email: req.body.email,
 			passwordHash: hash,
-			avatarUrl: req.body.avatarUrl,
+			avatarUrl: req.body.avatarUrl || 'https://png.pngtree.com/png-clipart/20210915/ourlarge/pngtree-avatar-placeholder-abstract-white-blue-green-png-image_3918476.jpg',
 		})
 
 		const user = await doc.save()
