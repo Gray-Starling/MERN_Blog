@@ -10,6 +10,11 @@ import {
 	loginValidation,
 	postCreateValidation,
 } from './validations.js'
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 mongoose
 	.connect(process.env.MONGODB)
@@ -35,7 +40,7 @@ app.use(cors())
 const upload = multer({ storage })
 
 app.use(express.json())
-app.use('/uploads', express.static('uploads'))
+app.use('/uploads', express.static(`${__dirname}/uploads`))
 
 app.post('/upload', checkAuth, async (req, res) => {
 	try {
