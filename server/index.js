@@ -31,11 +31,11 @@ const storage = multer.diskStorage({
 	},
 })
 
+app.use(cors())
 const upload = multer({ storage })
 
 app.use(express.json())
 app.use('/uploads', express.static('uploads'))
-app.use(cors())
 
 app.post('/upload', checkAuth, async (req, res) => {
 	try {
