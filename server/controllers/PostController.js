@@ -45,6 +45,7 @@ export const getOne = async (req, res) => {
 				returnDocument: 'after',
 			}
 		)
+			.populate('user')
 			.then(doc => {
 				if (!doc) {
 					return res.status(404).json({
@@ -71,7 +72,7 @@ export const create = async (req, res) => {
 		const doc = new PostModel({
 			title: req.body.title,
 			text: req.body.text,
-			imageUtl: req.body.imageUtl,
+			imageUrl: req.body.imageUrl,
 			tags: req.body.tags,
 			user: req.userId,
 		})
