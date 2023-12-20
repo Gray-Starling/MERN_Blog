@@ -11,6 +11,7 @@ import { fetchPosts, fetchTags } from '../store/slices/posts'
 export const Home = () => {
 	const dispatch = useDispatch()
 	const { posts, tags } = useSelector(state => state.posts)
+	const userData = useSelector(state => state.auth.data)
 
 	const isPostsLoading = posts.status === 'loading'
 	const isTagsLoading = tags.status === 'loading'
@@ -22,14 +23,14 @@ export const Home = () => {
 
 	return (
 		<>
-			<Tabs
+			{/* <Tabs
 				style={{ marginBottom: 15 }}
 				value={0}
 				aria-label='basic tabs example'>
 				<Tab label='Новые' />
 				<Tab label='Популярные' />
-			</Tabs>
-			<Grid container spacing={4}>
+			</Tabs> */}
+			{/* <Grid container spacing={4}> */}
 				<Grid xs={8} item>
 					{(isPostsLoading ? [...Array(5)] : posts.items).map((obj, index) =>
 						isPostsLoading ? (
@@ -45,12 +46,13 @@ export const Home = () => {
 								viewsCount={obj.viewsCount}
 								commentsCount={3}
 								tags={obj.tags}
-								isEditable
+								isEditable={userData?._id === obj.user._id}
+								// isEditable={true}
 							/>
 						)
 					)}
 				</Grid>
-				<Grid xs={4} item>
+				{/* <Grid xs={4} item>
 					<TagsBlock items={tags.items} isLoading={isTagsLoading} />
 					<CommentsBlock
 						items={[
@@ -71,8 +73,8 @@ export const Home = () => {
 						]}
 						isLoading={false}
 					/>
-				</Grid>
-			</Grid>
+				</Grid> */}
+			{/* </Grid> */}
 		</>
 	)
 }

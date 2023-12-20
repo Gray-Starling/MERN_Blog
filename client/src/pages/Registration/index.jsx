@@ -7,7 +7,7 @@ import Avatar from '@mui/material/Avatar'
 
 import styles from './Login.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAuth, selectIsAuth } from '../../store/slices/auth'
+import { fetchRegister, selectIsAuth } from '../../store/slices/auth'
 import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router-dom'
 
@@ -17,21 +17,20 @@ export const Registration = () => {
 	const {
 		register,
 		handleSubmit,
-		setError,
 		formState: { errors, isValid },
 	} = useForm({
 		defaultValues: {
-			fullName: 'Вася Пупкин',
-			email: 'vasy@mail.ru',
-			password: 'qwertyu',
+			fullName: '',
+			email: '',
+			password: '',
 		},
 		mode: 'onChange',
 	})
 
 	const onSubmit = async values => {
-		const data = await dispatch(fetchAuth(values))
+		const data = await dispatch(fetchRegister(values))
 		if (!data.payload) {
-			return alert('Не удалось авторизоваться')
+			return alert('Не удалось зарегистрироваться')
 		}
 		if ('token' in data.payload) {
 			window.localStorage.setItem('token', data.payload.token)
@@ -60,6 +59,7 @@ export const Registration = () => {
 					label='Полное имя'
 				/>
 				<TextField
+					type='email'
 					error={Boolean(errors.email?.message)}
 					helperText={errors.email?.message}
 					{...register('email', { required: 'Укажите почту' })}
@@ -68,7 +68,7 @@ export const Registration = () => {
 					label='E-Mail'
 				/>
 				<TextField
-        type='password'
+					type='password'
 					error={Boolean(errors.password?.message)}
 					helperText={errors.password?.message}
 					{...register('password', { required: 'Укажите пароль' })}
@@ -76,7 +76,12 @@ export const Registration = () => {
 					className={styles.field}
 					label='Пароль'
 				/>
-				<Button type='submit' size='large' variant='contained' fullWidth>
+				<Button
+					disabled={!isValid}
+					type='submit'
+					size='large'
+					variant='contained'
+					fullWidth>
 					Зарегистрироваться
 				</Button>
 			</form>

@@ -10,6 +10,8 @@ import styles from './Post.module.scss'
 import { UserInfo } from '../UserInfo'
 import { PostSkeleton } from './Skeleton'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { fetchRemovePosts } from '../../store/slices/posts'
 
 export const Post = ({
 	_id,
@@ -25,11 +27,18 @@ export const Post = ({
 	isLoading,
 	isEditable,
 }) => {
+	const dispatch = useDispatch()
+
 	if (isLoading) {
 		return <PostSkeleton />
 	}
 
-	const onClickRemove = () => {}
+	const onClickRemove = () => {
+		if (window.confirm('Уверены, что хотите удалить статью?')) {
+			dispatch(fetchRemovePosts(_id))
+		}
+	
+	}
 
 	return (
 		<div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>
@@ -72,10 +81,10 @@ export const Post = ({
 							<EyeIcon />
 							<span>{viewsCount}</span>
 						</li>
-						<li>
+						{/* <li>
 							<CommentIcon />
 							<span>{commentsCount}</span>
-						</li>
+						</li> */}
 					</ul>
 				</div>
 			</div>
