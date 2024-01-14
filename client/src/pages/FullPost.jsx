@@ -5,6 +5,7 @@ import { Index } from '../components/AddComment'
 import { CommentsBlock } from '../components/CommentsBlock'
 import { useParams } from 'react-router-dom'
 import axios from '../axios'
+import MDEditor from '@uiw/react-md-editor';
 
 export const FullPost = () => {
 	const [data, setData] = useState()
@@ -39,7 +40,8 @@ export const FullPost = () => {
 				commentsCount={3}
 				tags={data.tags}
 				isFullPost>
-				<p>{data.text}</p>
+				{/* <p>{data.text}</p> */}
+				<MDEditor.Markdown source={data.text} style={{ whiteSpace: 'pre-wrap' }} />
 			</Post>
 			{/* <CommentsBlock
 				items={[

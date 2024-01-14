@@ -21,7 +21,7 @@ export const Post = ({
 	user,
 	viewsCount,
 	commentsCount,
-	tags,
+	// tags,
 	children,
 	isFullPost,
 	isLoading,
@@ -68,23 +68,14 @@ export const Post = ({
 						className={clsx(styles.title, { [styles.titleFull]: isFullPost })}>
 						{isFullPost ? title : <Link to={`/posts/${_id}`}>{title}</Link>}
 					</h2>
-					<ul className={styles.tags}>
-						{tags.map(name => (
-							<li key={name}>
-								<Link to={`/tag/${name}`}>#{name}</Link>
-							</li>
-						))}
-					</ul>
+					
 					{children && <div className={styles.content}>{children}</div>}
 					<ul className={styles.postDetails}>
 						<li>
 							<EyeIcon />
 							<span>{viewsCount}</span>
 						</li>
-						{/* <li>
-							<CommentIcon />
-							<span>{commentsCount}</span>
-						</li> */}
+						
 					</ul>
 				</div>
 			</div>

@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import TextField from '@mui/material/TextField'
 import Paper from '@mui/material/Paper'
 import Button from '@mui/material/Button'
-import SimpleMDE from 'react-simplemde-editor'
+// import SimpleMDE from 'react-simplemde-editor'
+import MDEditor from '@uiw/react-md-editor';
 
 import 'easymde/dist/easymde.min.css'
 import styles from './AddPost.module.scss'
@@ -87,20 +88,20 @@ export const AddPost = () => {
 		}
 	}, [])
 
-	const options = useMemo(
-		() => ({
-			spellChecker: false,
-			maxHeight: '400px',
-			autofocus: true,
-			placeholder: 'Введите текст...',
-			status: false,
-			autosave: {
-				enabled: true,
-				delay: 1000,
-			},
-		}),
-		[]
-	)
+	// const options = useMemo(
+	// 	() => ({
+	// 		spellChecker: false,
+	// 		maxHeight: '400px',
+	// 		autofocus: true,
+	// 		placeholder: 'Введите текст...',
+	// 		status: false,
+	// 		autosave: {
+	// 			enabled: true,
+	// 			delay: 1000,
+	// 		},
+	// 	}),
+	// 	[]
+	// )
 
 	if (!window.localStorage.getItem('token') && !isAuth) {
 		return <Navigate to='/' />
@@ -130,7 +131,6 @@ export const AddPost = () => {
 					</Button>
 					<img
 						className={styles.image}
-						// src={`http://localhost:4444${imageUrl}`}
 						src={imageUrl}
 						alt='Uploaded'
 					/>
@@ -141,12 +141,6 @@ export const AddPost = () => {
 
 			<br />
 			<br />
-			{/* <img
-						className={styles.image}
-						// src={`http://localhost:4444${imageUrl}`}
-						src={`http://localhost:4444/uploads/ava.jpg`}
-						alt='Uploaded'
-					/> */}
 			<TextField
 				classes={{ root: styles.title }}
 				variant='standard'
@@ -155,20 +149,9 @@ export const AddPost = () => {
 				onChange={e => setTitle(e.target.value)}
 				fullWidth
 			/>
-			<TextField
-				classes={{ root: styles.tags }}
-				variant='standard'
-				placeholder='Тэги'
-				value={tags}
-				onChange={e => setTags(e.target.value)}
-				fullWidth
-			/>
-			<SimpleMDE
-				className={styles.editor}
-				value={text}
-				onChange={onChange}
-				options={options}
-			/>
+			<MDEditor className={styles.editor} value={text}  preview="edit"
+				onChange={onChange} />
+				
 			<div className={styles.buttons}>
 				<Button onClick={onSubmit} size='large' variant='contained'>
 					{isEditing ? 'Сохранить' : 'Опубликовать'}
