@@ -31,7 +31,7 @@ export const AddPost = () => {
 			formData.append('image', file)
 			const { data } = await axios.post('/upload', formData)
 			const image = new Image()
-			image.src = await `http://localhost:4444${data?.url}`
+			image.src =`http://localhost:4444${data?.url}`
 			image.onload = () => {
 				setImageUrl(image.src)
 			}
@@ -109,7 +109,7 @@ export const AddPost = () => {
 
 	return (
 		<Paper style={{ padding: 30 }}>
-			<Button
+			{/* <Button
 				onClick={e => inputFileRef.current.click()}
 				variant='outlined'
 				size='large'>
@@ -120,7 +120,7 @@ export const AddPost = () => {
 				type='file'
 				onChange={handleChangeFile}
 				hidden
-			/>
+			/> */}
 			{imageUrl ? (
 				<>
 					<Button
