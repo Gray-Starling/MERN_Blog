@@ -32,6 +32,7 @@ export const login = async (req, res) => {
 		await res.cookie('access_token', accessToken, {
 			maxAge: 60 * 60 * 1000 * 24 * 30,
 			httpOnly: true,
+			sameSite: "none"
 		})
 
 		return res.json({ token: accessToken })
