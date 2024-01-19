@@ -30,7 +30,7 @@ export const login = async (req, res) => {
 			'1h'
 		)
 		res.cookie('access_token', accessToken, {
-			maxAge: 300000,
+			maxAge: "30d",
 			httpOnly: true,
 		})
 
