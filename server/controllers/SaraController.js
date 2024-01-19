@@ -32,7 +32,8 @@ export const login = async (req, res) => {
 		await res.cookie('access_token', accessToken, {
 			maxAge: 60 * 60 * 1000 * 24 * 30,
 			httpOnly: true,
-			sameSite: "none"
+			sameSite: 'none',
+			secure: true,
 		})
 
 		return res.json({ token: accessToken })
@@ -49,7 +50,7 @@ export const logout = (req, res) => {
 		maxAge: 0,
 		httpOnly: true,
 	})
-	res.json({message: "Logged out"})
+	res.json({ message: 'Logged out' })
 }
 
 export const getUser = (req, res) => {
