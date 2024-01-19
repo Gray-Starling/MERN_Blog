@@ -3,7 +3,11 @@ import multer from 'multer'
 import mongoose from 'mongoose'
 import 'dotenv/config'
 import cors from 'cors'
-import { UserController, PostController } from './controllers/controllers.js'
+import {
+	UserController,
+	PostController,
+	SaraController,
+} from './controllers/controllers.js'
 import { checkAuth, handleValidationErrors } from './utils/utils.js'
 import {
 	registerValidation,
@@ -12,6 +16,8 @@ import {
 } from './validations.js'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
+import cookieParser from 'cookie-parser'
+import { deserializeUser } from './utils/deserializeUser.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -36,9 +42,15 @@ const storage = multer.diskStorage({
 	},
 })
 
-app.use(cors())
+app.use(
+	cors({
+		credentials: true,
+		origin: true,
+	})
+)
 const upload = multer({ storage })
 
+app.use(cookieParser())
 app.use(express.json())
 app.use('/uploads', express.static(`${__dirname}/uploads`))
 
@@ -72,6 +84,26 @@ app.post(
 	UserController.register
 )
 app.get('/auth/me', checkAuth, UserController.getMe)
+
+// ----- sarafan Api *****************************************************************
+app.post(
+	'/sara/login',
+	loginValidation,
+	handleValidationErrors,
+	SaraController.login
+)
+
+app.delete(
+	'/sara/logout',
+	SaraController.logout
+)
+
+app.get(
+	'/sara/getUser',
+	deserializeUser,
+	SaraController.getUser
+)
+
 app.get('/tags', PostController.getLastTags)
 
 app.get('/posts', PostController.getAll)
