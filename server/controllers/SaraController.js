@@ -51,7 +51,7 @@ export const logout =  async (req, res) => {
 	// 	httpOnly: true,
 	// })
 
-	res.clearCookie('access_token');
+	await res.clearCookie('access_token');
 	res.json({ message: 'Logged out' })
 }
 
