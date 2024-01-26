@@ -45,8 +45,8 @@ export const login = async (req, res) => {
 	}
 }
 
-export const logout = (req, res) => {
-	res.cookie('access_token', '', {
+export const logout =  async (req, res) => {
+	await res.cookie('access_token', '', {
 		maxAge: 0,
 		httpOnly: true,
 	})
