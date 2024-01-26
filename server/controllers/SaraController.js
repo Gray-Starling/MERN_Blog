@@ -46,10 +46,12 @@ export const login = async (req, res) => {
 }
 
 export const logout =  async (req, res) => {
-	await res.cookie('access_token', '', {
-		maxAge: 0,
-		httpOnly: true,
-	})
+	// await res.cookie('access_token', ' ', {
+	// 	maxAge: 0,
+	// 	httpOnly: true,
+	// })
+
+	res.clearCookie('access_token');
 	res.json({ message: 'Logged out' })
 }
 
